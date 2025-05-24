@@ -28,7 +28,7 @@
     #calculators {
       width: 100%;
       max-width: 600px;
-      margin-top: 24px; /* Calculadoras a 24px do topo */
+      margin-top: 24px;
     }
 
     /* Carousel container */
@@ -39,7 +39,6 @@
       transition: opacity 0.5s ease;
     }
 
-    /* Mostrar o item ativo */
     .carousel-item.active {
       display: block;
       opacity: 1;
@@ -67,6 +66,17 @@
       border-radius: 8px;
       border: 2px solid var(--input-bg);
       background-color: var(--input-bg);
+      box-sizing: border-box;
+    }
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    input[type="number"] {
+      -moz-appearance: textfield;
     }
 
     button {
@@ -93,11 +103,10 @@
       border-color: var(--white3);
     }
 
-    /* Carousel navigation buttons */
     .carousel-controls {
       display: flex;
       justify-content: center;
-      column-gap: 16px; /* Espaço entre os botões */
+      column-gap: 16px;
       margin-top: 16px;
     }
 
@@ -110,15 +119,6 @@
       font-weight: bold;
     }
 
-    @media (max-width: 600px) {
-      .calculator {
-        padding: 15px;
-      }
-      .carousel-control {
-        font-size: 14px;
-        padding: 8px 16px;
-      }
-    }
   </style>
 </head>
 <body>
@@ -173,22 +173,6 @@
         <div class="result" id="profitResultText"></div>
       </form>
     </div>
-
-    <div class="carousel-item">
-      <form id="compoundInterestCalculator" class="calculator">
-        <h2>Compound Interest Calculator</h2>
-        <label>Initial Investment:</label>
-        <input type="number" id="initialInvestment" />
-        <label>Monthly Contribution:</label>
-        <input type="number" id="contribution" />
-        <label>Rate (%):</label>
-        <input type="number" id="rate" />
-        <label>Period (Months):</label>
-        <input type="number" id="period" />
-        <button type="submit">Calculate</button>
-        <div class="result" id="compoundInterestResultText"></div>
-      </form>
-    </div>
   </div>
 
   <!-- Carousel Controls -->
@@ -197,6 +181,7 @@
     <button class="carousel-control next">Next</button>
   </div>
 
+  <script src="https://unpkg.com/mathjs@11.8.0/lib/browser/math.js"></script>
   <script>
     const items = document.querySelectorAll('.carousel-item');
     const prevButton = document.querySelector('.carousel-control.prev');
@@ -222,11 +207,59 @@
       showItem(currentIndex);
     });
 
-    // Placeholder for form submissions
     document.querySelectorAll('form').forEach(form => {
       form.addEventListener('submit', (e) => {
         e.preventDefault();
-        alert('Functionality coming soon!');
+        const id = form.id;
+
+        if (id === 'calculator') {
+          const expr = form.querySelector('#operationInput').value.trim();
+          if (expr) {
+            try {
+              const result = math.evaluate(expr);
+              form.querySelector('.result').innerText = `Result: ${result}`;
+            } catch {
+              form.querySelector('.result').innerText = 'Invalid Expression!';
+            }
+          } else {
+            form.querySelector('.result').innerText = 'Please enter a valid expression.';
+          }
+        }
+
+        if (id === 'ruleOfThreeCalculator') {
+          const A = parseFloat(form.querySelector('#inputA').value);
+          const B = parseFloat(form.querySelector('#inputB').value);
+          const C = parseFloat(form.querySelector('#inputC').value);
+          if (!isNaN(A) && !isNaN(B) && !isNaN(C)) {
+            const X = (B * C) / A;
+            form.querySelector('#inputX').value = X.toFixed(2);
+            form.querySelector('.result').innerText = `X = ${X.toFixed(2)}`;
+          } else {
+            form.querySelector('.result').innerText = 'Please fill all fields.';
+          }
+        }
+
+        if (id === 'leverageCalculator') {
+          const leverage = parseFloat(form.querySelector('#leverage').value);
+          const percentage = parseFloat(form.querySelector('#percentage').value);
+          if (!isNaN(leverage) && !isNaN(percentage)) {
+            const result = leverage * percentage;
+            form.querySelector('.result').innerText = `Leverage Profit: ${result.toFixed(2)}`;
+          } else {
+            form.querySelector('.result').innerText = 'Please fill all fields.';
+          }
+        }
+
+        if (id === 'profitCalculator') {
+          const lotSize = parseFloat(form.querySelector('#lotSize').value);
+          const profit = parseFloat(form.querySelector('#profit').value);
+          if (!isNaN(lotSize) && !isNaN(profit)) {
+            const result = (profit / lotSize) * 100;
+            form.querySelector('.result').innerText = `Profit Percentage: ${result.toFixed(2)}%`;
+          } else {
+            form.querySelector('.result').innerText = 'Please fill all fields.';
+          }
+        }
       });
     });
   </script>
