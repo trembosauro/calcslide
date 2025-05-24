@@ -82,7 +82,7 @@
       display: flex;
       flex-direction: column;
     }
-    label, input, button, select {
+    label, input, button, select, span {
       font-size: 16px;
       color: var(--white);
     }
@@ -90,19 +90,10 @@
       width: 100%;
       padding: 10px;
       margin-top: 8px;
-      margin-bottom: 16px;
       border-radius: 8px;
       border: 2px solid var(--input-bg);
       background-color: var(--input-bg);
       box-sizing: border-box;
-    }
-    input[type="number"]::-webkit-inner-spin-button,
-    input[type="number"]::-webkit-outer-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-    input[type="number"] {
-      -moz-appearance: textfield;
     }
     button[type="submit"] {
       padding: 12px;
@@ -113,6 +104,7 @@
       border: 2px solid var(--white2);
       cursor: pointer;
       transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+      margin-top: 20px;
     }
     button[type="submit"]:hover {
       background-color: var(--white2);
@@ -129,6 +121,45 @@
       margin-top: 20px;
       font-weight: bold;
       color: var(--white);
+    }
+    /* Rule of Three Custom Block */
+    .rule-three-block {
+      margin: 20px 0 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .rule-three-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .rule-three-label {
+      margin: 0 4px;
+      font-size: 14px;
+      opacity: 0.65;
+    }
+    .rule-three-equal {
+      text-align: center;
+      font-size: 0.95em;
+      color: var(--white3);
+      margin: 10px 0;
+      letter-spacing: 1px;
+      font-weight: bold;
+    }
+    .rule-three-row input[disabled] {
+      font-weight: bold;
+      font-size: 1.2em;
+      background: var(--primary-bg);
+      color: var(--white);
+      text-align: center;
+    }
+    .form-group { margin-bottom: 12px; }
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
     }
     @media (max-width: 900px) {
       .scroll-container, .carousel-controls {
@@ -149,7 +180,6 @@
   </div>
   <div class="scroll-container" id="scrollContainer">
     <div class="calculators-list" id="calculatorsList">
-      <!-- Normal Calculator -->
       <form id="calculator" class="calculator">
         <h2>Normal Calculator</h2>
         <label for="operationInput">Math Expression:</label>
@@ -157,21 +187,24 @@
         <button type="submit">Calculate</button>
         <div class="result" id="normalResultText"></div>
       </form>
-      <!-- Rule of Three -->
-      <form id="ruleOfThreeCalculator" class="calculator">
-        <h2>Rule of Three</h2>
-        <label>A:</label>
-        <input type="number" id="inputA" />
-        <label>B:</label>
-        <input type="number" id="inputB" />
-        <label>C:</label>
-        <input type="number" id="inputC" />
-        <label>X:</label>
-        <input type="text" id="inputX" disabled />
-        <button type="submit">Calculate</button>
+      <form class="calculator" id="ruleOfThreeCalculator" autocomplete="off">
+        <h2>Rule of Three Calculator</h2>
+        <div class="rule-three-block">
+          <div class="rule-three-row">
+            <input type="number" id="inputA" step="any" placeholder="A" />
+            <span class="rule-three-label">IS TO</span>
+            <input type="number" id="inputB" step="any" placeholder="B" />
+          </div>
+          <div class="rule-three-equal">AS</div>
+          <div class="rule-three-row">
+            <input type="number" id="inputC" step="any" placeholder="C" />
+            <span class="rule-three-label">IS TO</span>
+            <input type="text" id="inputX" placeholder="X" disabled style="font-weight:bold; font-size:1.2em;" />
+          </div>
+        </div>
+        <button type="submit" style="margin-top:30px;">Calculate</button>
         <div class="result" id="ruleOfThreeResultText"></div>
       </form>
-      <!-- Leverage -->
       <form id="leverageCalculator" class="calculator">
         <h2>Leverage Calculator</h2>
         <label>Leverage:</label>
@@ -181,7 +214,6 @@
         <button type="submit">Calculate</button>
         <div class="result" id="leveragedProfitResultText"></div>
       </form>
-      <!-- Profit Percentage -->
       <form id="profitCalculator" class="calculator">
         <h2>Profit Percentage Calculator</h2>
         <label>Lot Size ($):</label>
@@ -191,7 +223,6 @@
         <button type="submit">Calculate</button>
         <div class="result" id="profitResultText"></div>
       </form>
-      <!-- Compound Interest -->
       <form id="compoundInterestCalculator" class="calculator">
         <h2>Compound Interest Calculator</h2>
         <label>Initial Investment:</label>
@@ -205,19 +236,31 @@
         <button type="submit">Calculate</button>
         <div class="result" id="compoundInterestResultText"></div>
       </form>
-      <!-- B3 Calculator -->
-      <form id="b3Calculator" class="calculator">
-        <h2>Calculadora B3</h2>
-        <label>Preço de compra:</label>
-        <input type="number" id="b3_preco_compra" />
-        <label>Preço de venda:</label>
-        <input type="number" id="b3_preco_venda" />
-        <label>Quantidade:</label>
-        <input type="number" id="b3_qtd" />
-        <label>Corretagem:</label>
-        <input type="number" id="b3_corretagem" />
-        <button type="submit">Calcular</button>
-        <div class="result" id="b3ResultText"></div>
+      <form class="calculator" id="b3ProfitCalculator" autocomplete="off">
+        <h2>B3 Profit Calculator</h2>
+        <div class="form-group">
+          <label for="contracts">Contracts:</label>
+          <input type="number" id="contracts" name="contracts" />
+        </div>
+        <div class="form-group">
+          <label for="type">Type:</label>
+          <select id="type" name="type">
+            <option value="miniIndice">Mini Index</option>
+            <option value="miniDolar">Mini Dollar</option>
+            <option value="indice">Index</option>
+            <option value="dolar">Dollar</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="points">Points:</label>
+          <input type="number" id="points" step="0.5" name="points" />
+        </div>
+        <div class="checkbox-container">
+          <span>Tax Deducted</span>
+          <input type="checkbox" id="taxDeducted" name="taxDeducted" />
+        </div>
+        <button type="submit">Calculate</button>
+        <div class="result" id="b3ProfitResultText"></div>
       </form>
     </div>
   </div>
@@ -239,7 +282,7 @@
         resultDiv.textContent = 'Please enter a valid expression.';
       }
     });
-    // Rule of Three
+    // Rule of Three (Novo formato)
     document.getElementById('ruleOfThreeCalculator').addEventListener('submit', function(e){
       e.preventDefault();
       const A = parseFloat(document.getElementById('inputA').value);
@@ -249,8 +292,8 @@
       const inputX = document.getElementById('inputX');
       if (!isNaN(A) && !isNaN(B) && !isNaN(C) && A !== 0) {
         const X = (B * C) / A;
-        inputX.value = X.toFixed(2);
-        resultDiv.textContent = `X = ${X.toFixed(2)}`;
+        inputX.value = X.toFixed(4);
+        resultDiv.textContent = `X = ${X.toFixed(4)}`;
       } else {
         resultDiv.textContent = 'Please fill all fields.';
         inputX.value = '';
@@ -300,26 +343,30 @@
         resultDiv.textContent = 'Please fill all fields.';
       }
     });
-    // B3
-    document.getElementById('b3Calculator').addEventListener('submit', function(e){
+    // B3 Profit Calculator
+    document.getElementById('b3ProfitCalculator').addEventListener('submit', function(e){
       e.preventDefault();
-      const precoCompra = parseFloat(document.getElementById('b3_preco_compra').value);
-      const precoVenda = parseFloat(document.getElementById('b3_preco_venda').value);
-      const qtd = parseFloat(document.getElementById('b3_qtd').value);
-      const corretagem = parseFloat(document.getElementById('b3_corretagem').value);
-      const resultDiv = document.getElementById('b3ResultText');
-      if (!isNaN(precoCompra) && !isNaN(precoVenda) && !isNaN(qtd) && !isNaN(corretagem)) {
-        const totalCompra = precoCompra * qtd;
-        const totalVenda = precoVenda * qtd;
-        const imposto = totalVenda * 0.0003;
-        const lucro = totalVenda - totalCompra - corretagem - imposto;
-        resultDiv.textContent = `Lucro líquido: R$ ${lucro.toFixed(2)} (IRRF: R$ ${imposto.toFixed(2)})`;
-      } else {
-        resultDiv.textContent = 'Preencha todos os campos.';
+      const contracts = parseInt(document.getElementById('contracts').value, 10);
+      const type = document.getElementById('type').value;
+      const points = parseFloat(document.getElementById('points').value);
+      const taxDeducted = document.getElementById('taxDeducted').checked;
+      const resultDiv = document.getElementById('b3ProfitResultText');
+      if (isNaN(contracts) || isNaN(points)) {
+        resultDiv.textContent = 'Please fill all fields.';
+        return;
       }
+      let multiplier = 1;
+      switch (type) {
+        case "miniIndice": multiplier = 0.2; break;
+        case "miniDolar":  multiplier = 10; break;
+        case "indice":     multiplier = 1; break;
+        case "dolar":      multiplier = 50; break;
+      }
+      let profit = contracts * points * multiplier;
+      if (taxDeducted) profit *= 0.8;
+      resultDiv.textContent = `Profit: R$ ${profit.toFixed(2)}${taxDeducted ? ' (after 20% tax)' : ''}`;
     });
-
-    // --------- Scroll/Center logic ---------
+    // Scroll/Center logic
     const forms = Array.from(document.querySelectorAll('.calculator'));
     let selectedIndex = 0;
     function centerCalculator(idx){
