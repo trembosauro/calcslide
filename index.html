@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Calculators</title>
+  <title>Calculadoras</title>
   <style>
     :root {
       --primary-bg: #1F1F1F;
@@ -58,23 +58,29 @@
       width: 100%;
       max-width: 600px;
       overflow-x: auto;
-      overflow-y: visible;
-      padding-bottom: 16px;
+      overflow-y: hidden;
+      padding-bottom: 24px;
       scroll-behavior: smooth;
+      display: flex;
+      align-items: flex-start;
     }
     .calculators-list {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       gap: 32px;
+      width: fit-content;
     }
     .calculator {
       background-color: var(--card-bg);
       padding: 20px;
       border-radius: 16px;
       box-shadow: 0 0 10px rgba(0,0,0,0.35);
-      min-width: 100%;
-      width: 100%;
+      min-width: 320px;
+      max-width: 320px;
+      width: 320px;
       box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
     }
     label, input, button, select {
       font-size: 16px;
@@ -124,25 +130,23 @@
       font-weight: bold;
       color: var(--white);
     }
-    @media (max-width: 640px) {
-      .calculator {
-        padding: 15px;
-        min-width: 100vw;
-      }
+    @media (max-width: 900px) {
       .scroll-container, .carousel-controls {
         max-width: 100vw;
+      }
+      .calculator {
+        min-width: 90vw;
+        max-width: 90vw;
+        width: 90vw;
       }
     }
   </style>
 </head>
 <body>
-  <!-- Carousel Controls (top) -->
   <div class="carousel-controls">
     <button class="carousel-control prev">Anterior</button>
     <button class="carousel-control next">Próximo</button>
   </div>
-
-  <!-- Scrollable Container -->
   <div class="scroll-container" id="scrollContainer">
     <div class="calculators-list" id="calculatorsList">
       <!-- Normal Calculator -->
@@ -201,12 +205,25 @@
         <button type="submit">Calculate</button>
         <div class="result" id="compoundInterestResultText"></div>
       </form>
+      <!-- B3 Calculator -->
+      <form id="b3Calculator" class="calculator">
+        <h2>Calculadora B3</h2>
+        <label>Preço de compra:</label>
+        <input type="number" id="b3_preco_compra" />
+        <label>Preço de venda:</label>
+        <input type="number" id="b3_preco_venda" />
+        <label>Quantidade:</label>
+        <input type="number" id="b3_qtd" />
+        <label>Corretagem:</label>
+        <input type="number" id="b3_corretagem" />
+        <button type="submit">Calcular</button>
+        <div class="result" id="b3ResultText"></div>
+      </form>
     </div>
   </div>
-
   <script src="https://unpkg.com/mathjs@11.8.0/lib/browser/math.js"></script>
   <script>
-    // Calculadora Normal
+    // Normal Calculator
     document.getElementById('calculator').addEventListener('submit', function(e){
       e.preventDefault();
       const expr = document.getElementById('operationInput').value.trim();
@@ -222,8 +239,7 @@
         resultDiv.textContent = 'Please enter a valid expression.';
       }
     });
-
-    // Regra de 3
+    // Rule of Three
     document.getElementById('ruleOfThreeCalculator').addEventListener('submit', function(e){
       e.preventDefault();
       const A = parseFloat(document.getElementById('inputA').value);
@@ -240,8 +256,7 @@
         inputX.value = '';
       }
     });
-
-    // Alavancagem
+    // Leverage
     document.getElementById('leverageCalculator').addEventListener('submit', function(e){
       e.preventDefault();
       const leverage = parseFloat(document.getElementById('leverage').value);
@@ -254,8 +269,7 @@
         resultDiv.textContent = 'Please fill all fields.';
       }
     });
-
-    // Porcentagem de Lucro
+    // Profit percentage
     document.getElementById('profitCalculator').addEventListener('submit', function(e){
       e.preventDefault();
       const lotSize = parseFloat(document.getElementById('lotSize').value);
@@ -268,8 +282,7 @@
         resultDiv.textContent = 'Please fill all fields.';
       }
     });
-
-    // Juros Compostos
+    // Compound interest
     document.getElementById('compoundInterestCalculator').addEventListener('submit', function(e){
       e.preventDefault();
       const initialInvestment = parseFloat(document.getElementById('initialInvestment').value);
@@ -287,34 +300,48 @@
         resultDiv.textContent = 'Please fill all fields.';
       }
     });
+    // B3
+    document.getElementById('b3Calculator').addEventListener('submit', function(e){
+      e.preventDefault();
+      const precoCompra = parseFloat(document.getElementById('b3_preco_compra').value);
+      const precoVenda = parseFloat(document.getElementById('b3_preco_venda').value);
+      const qtd = parseFloat(document.getElementById('b3_qtd').value);
+      const corretagem = parseFloat(document.getElementById('b3_corretagem').value);
+      const resultDiv = document.getElementById('b3ResultText');
+      if (!isNaN(precoCompra) && !isNaN(precoVenda) && !isNaN(qtd) && !isNaN(corretagem)) {
+        const totalCompra = precoCompra * qtd;
+        const totalVenda = precoVenda * qtd;
+        const imposto = totalVenda * 0.0003;
+        const lucro = totalVenda - totalCompra - corretagem - imposto;
+        resultDiv.textContent = `Lucro líquido: R$ ${lucro.toFixed(2)} (IRRF: R$ ${imposto.toFixed(2)})`;
+      } else {
+        resultDiv.textContent = 'Preencha todos os campos.';
+      }
+    });
 
     // --------- Scroll/Center logic ---------
     const forms = Array.from(document.querySelectorAll('.calculator'));
     let selectedIndex = 0;
-
     function centerCalculator(idx){
       const calculatorsList = document.getElementById('calculatorsList');
       const scrollContainer = document.getElementById('scrollContainer');
       const calculator = forms[idx];
-      const scrollTop = calculator.offsetTop - calculatorsList.offsetTop - 10;
+      const calculatorRect = calculator.getBoundingClientRect();
+      const containerRect = scrollContainer.getBoundingClientRect();
+      const scrollLeft = calculator.offsetLeft - calculatorsList.offsetLeft - (containerRect.width / 2 - calculatorRect.width / 2);
       scrollContainer.scrollTo({
-        top: scrollTop,
+        left: scrollLeft,
         behavior: 'smooth'
       });
     }
-
     document.querySelector('.carousel-control.prev').addEventListener('click', function(){
       selectedIndex = selectedIndex > 0 ? selectedIndex - 1 : forms.length - 1;
       centerCalculator(selectedIndex);
     });
-
     document.querySelector('.carousel-control.next').addEventListener('click', function(){
       selectedIndex = selectedIndex < forms.length - 1 ? selectedIndex + 1 : 0;
       centerCalculator(selectedIndex);
     });
-
-    // Opcional: Centralize o primeiro ao carregar página
-    // window.onload = () => { centerCalculator(0); }
   </script>
 </body>
 </html>
