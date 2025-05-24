@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Unified Calculators</title>
+  <style>
+    :root {
+      --primary-bg: #1F1F1F;
+      --card-bg: #2B2B2B;
+      --input-bg: #3D3D3D;
+      --white: rgba(255,255,255,0.9);
+      --white2: rgba(255,255,255,0.42);
+      --white3: rgba(255,255,255,0.56);
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: var(--primary-bg);
+      color: var(--white);
+      margin: 0;
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .carousel {
+      position: relative;
+      width: 100%;
+      max-width: 600px;
+      overflow: hidden;
+    }
+
+    .carousel-inner {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+    }
+
+    .carousel-item {
+      min-width: 100%;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    .carousel-item.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .calculator {
+      background-color: var(--card-bg);
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.35);
+    }
+
+    label, input, button {
+      font-size: 16px;
+      color: var(--white);
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      margin-bottom: 16px;
+      border-radius: 8px;
+      border: 2px solid var(--input-bg);
+      background-color: var(--input-bg);
+    }
+
+    button {
+      padding: 12px;
+      width: 100%;
+      border-radius: 8px;
+      background-color: var(--white2);
+      border: none;
+      cursor: pointer;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    .carousel-control {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 24px;
+      background: rgba(255, 255, 255, 0.7);
+      border: none;
+      cursor: pointer;
+      padding: 10px;
+    }
+
+    .carousel-control.prev {
+      left: 10px;
+    }
+
+    .carousel-control.next {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <form id="calculator" class="calculator">
+          <h2>Normal Calculator</h2>
+          <label for="operationInput">Math Expression:</label>
+          <input type="text" id="operationInput" placeholder="Type an operation" />
+          <button type="submit">Calculate</button>
+          <div class="result" id="normalResultText"></div>
+        </form>
+      </div>
+      <div class="carousel-item">
+        <form id="ruleOfThreeCalculator" class="calculator">
+          <h2>Rule of Three</h2>
+          <label>A:</label>
+          <input type="number" id="inputA" />
+          <label>B:</label>
+          <input type="number" id="inputB" />
+          <label>C:</label>
+          <input type="number" id="inputC" />
+          <label>X:</label>
+          <input type="text" id="inputX" disabled />
+          <button type="submit">Calculate</button>
+          <div class="result" id="ruleOfThreeResultText"></div>
+        </form>
+      </div>
+      <div class="carousel-item">
+        <form id="leverageCalculator" class="calculator">
+          <h2>Leverage Calculator</h2>
+          <label>Leverage:</label>
+          <input type="number" id="leverage" />
+          <label>Percentage Earned (%):</label>
+          <input type="number" id="percentage" />
+          <button type="submit">Calculate</button>
+          <div class="result" id="leveragedProfitResultText"></div>
+        </form>
+      </div>
+      <div class="carousel-item">
+        <form id="profitCalculator" class="calculator">
+          <h2>Profit Percentage</h2>
+          <label>Lot Size ($):</label>
+          <input type="number" id="lotSize" />
+          <label>Profit Amount ($):</label>
+          <input type="number" id="profit" />
+          <button type="submit">Calculate</button>
+          <div class="result" id="profitResultText"></div>
+        </form>
+      </div>
+      <div class="carousel-item">
+        <form id="compoundInterestCalculator" class="calculator">
+          <h2>Compound Interest</h2>
+          <label>Initial Investment:</label>
+          <input type="number" id="initialInvestment" />
+          <label>Monthly Contribution:</label>
+          <input type="number" id="contribution" />
+          <label>Rate (%):</label>
+          <input type="number" id="rate" />
+          <label>Period (Months):</label>
+          <input type="number" id="period" />
+          <button type="submit">Calculate</button>
+          <div class="result" id="compoundInterestResultText"></div>
+        </form>
+      </div>
+    </div>
+    <button class="carousel-control prev">&lt;</button>
+    <button class="carousel-control next">&gt;</button>
+  </div>
+  <script>
+    const items = document.querySelectorAll('.carousel-item');
+    const prevButton = document.querySelector('.carousel-control.prev');
+    const nextButton = document.querySelector('.carousel-control.next');
+    let currentIndex = 0;
+
+    function showItem(index) {
+      items.forEach((item, i) => {
+        item.classList.remove('active');
+        if (i === index) item.classList.add('active');
+      });
+      document.querySelector('.carousel-inner').style.transform = `translateX(-${index * 100}%)`;
+    }
+
+    prevButton.addEventListener('click', () => {
+      currentIndex = (currentIndex > 0) ? currentIndex - 1 : items.length - 1;
+      showItem(currentIndex);
+    });
+
+    nextButton.addEventListener('click', () => {
+      currentIndex = (currentIndex < items.length - 1) ? currentIndex + 1 : 0;
+      showItem(currentIndex);
+    });
+
+    // Placeholders for form submissions
+    document.querySelectorAll('form').forEach(form => {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        alert('Functionality coming soon!');
+      });
+    });
+  </script>
+</body>
+</html>
