@@ -19,49 +19,38 @@
       background-color: var(--primary-bg);
       color: var(--white);
       margin: 0;
-      padding: 24px 16px;
+      padding: 24px 16px 0 16px;
       display: flex;
       flex-direction: column;
       align-items: center;
     }
 
-    .carousel-wrapper {
+    #calculators {
       width: 100%;
       max-width: 600px;
-      margin: 20px 0;
+      margin-top: 24px; /* Calculadoras a 24px do topo */
     }
 
     /* Carousel container */
-    .carousel {
-      position: relative;
-      overflow: hidden;
-      width: 100%;
-    }
-
-    .carousel-inner {
-      display: flex;
-      transition: transform 0.5s ease-in-out;
-    }
-
     .carousel-item {
-      min-width: 100%;
-      transition: opacity 0.5s ease;
+      display: none;
       opacity: 0;
       pointer-events: none;
+      transition: opacity 0.5s ease;
     }
 
+    /* Mostrar o item ativo */
     .carousel-item.active {
+      display: block;
       opacity: 1;
       pointer-events: auto;
     }
 
-    /* Calculator styling */
     .calculator {
       background-color: var(--card-bg);
       padding: 20px;
       border-radius: 16px;
       box-shadow: 0 0 10px rgba(0,0,0,0.35);
-      max-width: 600px;
       width: 100%;
     }
 
@@ -80,7 +69,6 @@
       background-color: var(--input-bg);
     }
 
-    /* Unified button styling (used for both Calculate and Slide buttons) */
     button {
       padding: 12px;
       width: 100%;
@@ -109,12 +97,11 @@
     .carousel-controls {
       display: flex;
       justify-content: center;
-      gap: 10px;
-      margin-top: 20px;
+      column-gap: 16px; /* Espaço entre os botões */
+      margin-top: 16px;
     }
 
     .carousel-control {
-      width: auto; /* Obedece ao estilo dos botões */
       padding: 12px 24px;
     }
 
