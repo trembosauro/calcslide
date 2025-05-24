@@ -80,18 +80,29 @@
       background-color: var(--input-bg);
     }
 
+    /* Unified button styling (used for both Calculate and Slide buttons) */
     button {
       padding: 12px;
       width: 100%;
-      border-radius: 8px;
-      background-color: var(--white2);
-      border: none;
+      border-radius: 16px;
+      background-color: transparent;
+      color: var(--white);
+      border: 2px solid var(--white2);
       cursor: pointer;
+      transition: background-color 0.3s, border-color 0.3s, color 0.3s;
     }
 
-    .result {
-      margin-top: 20px;
-      font-weight: bold;
+    button:hover {
+      background-color: var(--white2);
+      color: var(--primary-bg);
+      border-color: var(--white3);
+    }
+
+    button:focus {
+      outline: none;
+      background-color: var(--white3);
+      color: var(--primary-bg);
+      border-color: var(--white3);
     }
 
     /* Carousel navigation buttons */
@@ -103,22 +114,13 @@
     }
 
     .carousel-control {
-      font-size: 18px;
-      padding: 8px 16px;
-      border-radius: 4px;
-      background: var(--white3);
-      color: var(--primary-bg);
-      border: none;
-      cursor: pointer;
-      transition: background 0.3s ease;
+      width: auto; /* Obedece ao estilo dos botões */
+      padding: 12px 24px;
     }
 
-    .carousel-control:hover {
-      background: var(--white2);
-    }
-
-    .carousel-control:focus {
-      outline: none;
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
     }
 
     @media (max-width: 600px) {
@@ -127,7 +129,7 @@
       }
       .carousel-control {
         font-size: 14px;
-        padding: 6px 12px;
+        padding: 8px 16px;
       }
     }
   </style>
