@@ -13,7 +13,7 @@
       --white2: rgba(255,255,255,0.42);
       --white3: rgba(255,255,255,0.56);
     }
-
+    * { box-sizing: border-box; }
     body {
       font-family: Arial, sans-serif;
       background-color: var(--primary-bg);
@@ -24,40 +24,62 @@
       flex-direction: column;
       align-items: center;
     }
-
-    #calculators {
+    .carousel-controls {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 16px;
       width: 100%;
       max-width: 600px;
-      margin-top: 24px;
     }
-
-    /* Carousel container */
-    .carousel-item {
-      display: none;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.5s ease;
+    .carousel-control {
+      padding: 12px 24px;
+      border-radius: 16px;
+      background-color: transparent;
+      color: var(--white);
+      border: 2px solid var(--white2);
+      cursor: pointer;
+      transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+      font-size: 16px;
+      width: auto;
     }
-
-    .carousel-item.active {
-      display: block;
-      opacity: 1;
-      pointer-events: auto;
+    .carousel-control:hover {
+      background-color: var(--white2);
+      color: var(--primary-bg);
+      border-color: var(--white3);
     }
-
+    .carousel-control:focus {
+      outline: none;
+      background-color: var(--white3);
+      color: var(--primary-bg);
+      border-color: var(--white3);
+    }
+    .scroll-container {
+      width: 100%;
+      max-width: 600px;
+      overflow-x: auto;
+      overflow-y: visible;
+      padding-bottom: 16px;
+      scroll-behavior: smooth;
+    }
+    .calculators-list {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
     .calculator {
       background-color: var(--card-bg);
       padding: 20px;
       border-radius: 16px;
       box-shadow: 0 0 10px rgba(0,0,0,0.35);
+      min-width: 100%;
       width: 100%;
+      box-sizing: border-box;
     }
-
     label, input, button, select {
       font-size: 16px;
       color: var(--white);
     }
-
     input, select {
       width: 100%;
       padding: 10px;
@@ -68,18 +90,15 @@
       background-color: var(--input-bg);
       box-sizing: border-box;
     }
-
     input[type="number"]::-webkit-inner-spin-button,
     input[type="number"]::-webkit-outer-spin-button {
       -webkit-appearance: none;
       margin: 0;
     }
-
     input[type="number"] {
       -moz-appearance: textfield;
     }
-
-    button {
+    button[type="submit"] {
       padding: 12px;
       width: 100%;
       border-radius: 16px;
@@ -89,42 +108,44 @@
       cursor: pointer;
       transition: background-color 0.3s, border-color 0.3s, color 0.3s;
     }
-
-    button:hover {
+    button[type="submit"]:hover {
       background-color: var(--white2);
       color: var(--primary-bg);
       border-color: var(--white3);
     }
-
-    button:focus {
+    button[type="submit"]:focus {
       outline: none;
       background-color: var(--white3);
       color: var(--primary-bg);
       border-color: var(--white3);
     }
-
-    .carousel-controls {
-      display: flex;
-      justify-content: center;
-      column-gap: 16px;
-      margin-top: 16px;
-    }
-
-    .carousel-control {
-      padding: 12px 24px;
-    }
-
     .result {
       margin-top: 20px;
       font-weight: bold;
+      color: var(--white);
     }
-
+    @media (max-width: 640px) {
+      .calculator {
+        padding: 15px;
+        min-width: 100vw;
+      }
+      .scroll-container, .carousel-controls {
+        max-width: 100vw;
+      }
+    }
   </style>
 </head>
 <body>
-  <!-- Calculators -->
-  <div id="calculators">
-    <div class="carousel-item active">
+  <!-- Carousel Controls (top) -->
+  <div class="carousel-controls">
+    <button class="carousel-control prev">Anterior</button>
+    <button class="carousel-control next">Próximo</button>
+  </div>
+
+  <!-- Scrollable Container -->
+  <div class="scroll-container" id="scrollContainer">
+    <div class="calculators-list" id="calculatorsList">
+      <!-- Normal Calculator -->
       <form id="calculator" class="calculator">
         <h2>Normal Calculator</h2>
         <label for="operationInput">Math Expression:</label>
@@ -132,9 +153,7 @@
         <button type="submit">Calculate</button>
         <div class="result" id="normalResultText"></div>
       </form>
-    </div>
-
-    <div class="carousel-item">
+      <!-- Rule of Three -->
       <form id="ruleOfThreeCalculator" class="calculator">
         <h2>Rule of Three</h2>
         <label>A:</label>
@@ -148,9 +167,7 @@
         <button type="submit">Calculate</button>
         <div class="result" id="ruleOfThreeResultText"></div>
       </form>
-    </div>
-
-    <div class="carousel-item">
+      <!-- Leverage -->
       <form id="leverageCalculator" class="calculator">
         <h2>Leverage Calculator</h2>
         <label>Leverage:</label>
@@ -160,9 +177,7 @@
         <button type="submit">Calculate</button>
         <div class="result" id="leveragedProfitResultText"></div>
       </form>
-    </div>
-
-    <div class="carousel-item">
+      <!-- Profit Percentage -->
       <form id="profitCalculator" class="calculator">
         <h2>Profit Percentage Calculator</h2>
         <label>Lot Size ($):</label>
@@ -172,96 +187,134 @@
         <button type="submit">Calculate</button>
         <div class="result" id="profitResultText"></div>
       </form>
+      <!-- Compound Interest -->
+      <form id="compoundInterestCalculator" class="calculator">
+        <h2>Compound Interest Calculator</h2>
+        <label>Initial Investment:</label>
+        <input type="number" id="initialInvestment" />
+        <label>Monthly Contribution:</label>
+        <input type="number" id="contribution" />
+        <label>Rate (%):</label>
+        <input type="number" id="rate" />
+        <label>Period (Months):</label>
+        <input type="number" id="period" />
+        <button type="submit">Calculate</button>
+        <div class="result" id="compoundInterestResultText"></div>
+      </form>
     </div>
-  </div>
-
-  <!-- Carousel Controls -->
-  <div class="carousel-controls">
-    <button class="carousel-control prev">Previous</button>
-    <button class="carousel-control next">Next</button>
   </div>
 
   <script src="https://unpkg.com/mathjs@11.8.0/lib/browser/math.js"></script>
   <script>
-    const items = document.querySelectorAll('.carousel-item');
-    const prevButton = document.querySelector('.carousel-control.prev');
-    const nextButton = document.querySelector('.carousel-control.next');
-    let currentIndex = 0;
-
-    function showItem(index) {
-      items.forEach((item, i) => {
-        item.classList.remove('active');
-        if (i === index) {
-          item.classList.add('active');
+    // Calculadora Normal
+    document.getElementById('calculator').addEventListener('submit', function(e){
+      e.preventDefault();
+      const expr = document.getElementById('operationInput').value.trim();
+      const resultDiv = document.getElementById('normalResultText');
+      if(expr){
+        try{
+          const result = math.evaluate(expr);
+          resultDiv.textContent = `Result: ${result}`;
+        }catch{
+          resultDiv.textContent = 'Invalid Expression!';
         }
+      } else {
+        resultDiv.textContent = 'Please enter a valid expression.';
+      }
+    });
+
+    // Regra de 3
+    document.getElementById('ruleOfThreeCalculator').addEventListener('submit', function(e){
+      e.preventDefault();
+      const A = parseFloat(document.getElementById('inputA').value);
+      const B = parseFloat(document.getElementById('inputB').value);
+      const C = parseFloat(document.getElementById('inputC').value);
+      const resultDiv = document.getElementById('ruleOfThreeResultText');
+      const inputX = document.getElementById('inputX');
+      if (!isNaN(A) && !isNaN(B) && !isNaN(C) && A !== 0) {
+        const X = (B * C) / A;
+        inputX.value = X.toFixed(2);
+        resultDiv.textContent = `X = ${X.toFixed(2)}`;
+      } else {
+        resultDiv.textContent = 'Please fill all fields.';
+        inputX.value = '';
+      }
+    });
+
+    // Alavancagem
+    document.getElementById('leverageCalculator').addEventListener('submit', function(e){
+      e.preventDefault();
+      const leverage = parseFloat(document.getElementById('leverage').value);
+      const percentage = parseFloat(document.getElementById('percentage').value);
+      const resultDiv = document.getElementById('leveragedProfitResultText');
+      if (!isNaN(leverage) && !isNaN(percentage)) {
+        const result = leverage * percentage;
+        resultDiv.textContent = `Leverage Profit: ${result.toFixed(2)}`;
+      } else {
+        resultDiv.textContent = 'Please fill all fields.';
+      }
+    });
+
+    // Porcentagem de Lucro
+    document.getElementById('profitCalculator').addEventListener('submit', function(e){
+      e.preventDefault();
+      const lotSize = parseFloat(document.getElementById('lotSize').value);
+      const profit = parseFloat(document.getElementById('profit').value);
+      const resultDiv = document.getElementById('profitResultText');
+      if (!isNaN(lotSize) && !isNaN(profit) && lotSize !== 0) {
+        const result = (profit / lotSize) * 100;
+        resultDiv.textContent = `Profit Percentage: ${result.toFixed(2)}%`;
+      } else {
+        resultDiv.textContent = 'Please fill all fields.';
+      }
+    });
+
+    // Juros Compostos
+    document.getElementById('compoundInterestCalculator').addEventListener('submit', function(e){
+      e.preventDefault();
+      const initialInvestment = parseFloat(document.getElementById('initialInvestment').value);
+      const contribution = parseFloat(document.getElementById('contribution').value);
+      const rate = parseFloat(document.getElementById('rate').value) / 100;
+      const period = parseInt(document.getElementById('period').value);
+      const resultDiv = document.getElementById('compoundInterestResultText');
+      if (!isNaN(initialInvestment) && !isNaN(contribution) && !isNaN(rate) && !isNaN(period)) {
+        let finalAmount = initialInvestment * Math.pow(1 + rate, period);
+        for(let i = 1; i <= period; i++) {
+          finalAmount += contribution * Math.pow(1 + rate, period - i);
+        }
+        resultDiv.textContent = `Final Amount: $${finalAmount.toFixed(2)}`;
+      } else {
+        resultDiv.textContent = 'Please fill all fields.';
+      }
+    });
+
+    // --------- Scroll/Center logic ---------
+    const forms = Array.from(document.querySelectorAll('.calculator'));
+    let selectedIndex = 0;
+
+    function centerCalculator(idx){
+      const calculatorsList = document.getElementById('calculatorsList');
+      const scrollContainer = document.getElementById('scrollContainer');
+      const calculator = forms[idx];
+      const scrollTop = calculator.offsetTop - calculatorsList.offsetTop - 10;
+      scrollContainer.scrollTo({
+        top: scrollTop,
+        behavior: 'smooth'
       });
     }
 
-    prevButton.addEventListener('click', () => {
-      currentIndex = (currentIndex > 0) ? currentIndex - 1 : items.length - 1;
-      showItem(currentIndex);
+    document.querySelector('.carousel-control.prev').addEventListener('click', function(){
+      selectedIndex = selectedIndex > 0 ? selectedIndex - 1 : forms.length - 1;
+      centerCalculator(selectedIndex);
     });
 
-    nextButton.addEventListener('click', () => {
-      currentIndex = (currentIndex < items.length - 1) ? currentIndex + 1 : 0;
-      showItem(currentIndex);
+    document.querySelector('.carousel-control.next').addEventListener('click', function(){
+      selectedIndex = selectedIndex < forms.length - 1 ? selectedIndex + 1 : 0;
+      centerCalculator(selectedIndex);
     });
 
-    document.querySelectorAll('form').forEach(form => {
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const id = form.id;
-
-        if (id === 'calculator') {
-          const expr = form.querySelector('#operationInput').value.trim();
-          if (expr) {
-            try {
-              const result = math.evaluate(expr);
-              form.querySelector('.result').innerText = `Result: ${result}`;
-            } catch {
-              form.querySelector('.result').innerText = 'Invalid Expression!';
-            }
-          } else {
-            form.querySelector('.result').innerText = 'Please enter a valid expression.';
-          }
-        }
-
-        if (id === 'ruleOfThreeCalculator') {
-          const A = parseFloat(form.querySelector('#inputA').value);
-          const B = parseFloat(form.querySelector('#inputB').value);
-          const C = parseFloat(form.querySelector('#inputC').value);
-          if (!isNaN(A) && !isNaN(B) && !isNaN(C)) {
-            const X = (B * C) / A;
-            form.querySelector('#inputX').value = X.toFixed(2);
-            form.querySelector('.result').innerText = `X = ${X.toFixed(2)}`;
-          } else {
-            form.querySelector('.result').innerText = 'Please fill all fields.';
-          }
-        }
-
-        if (id === 'leverageCalculator') {
-          const leverage = parseFloat(form.querySelector('#leverage').value);
-          const percentage = parseFloat(form.querySelector('#percentage').value);
-          if (!isNaN(leverage) && !isNaN(percentage)) {
-            const result = leverage * percentage;
-            form.querySelector('.result').innerText = `Leverage Profit: ${result.toFixed(2)}`;
-          } else {
-            form.querySelector('.result').innerText = 'Please fill all fields.';
-          }
-        }
-
-        if (id === 'profitCalculator') {
-          const lotSize = parseFloat(form.querySelector('#lotSize').value);
-          const profit = parseFloat(form.querySelector('#profit').value);
-          if (!isNaN(lotSize) && !isNaN(profit)) {
-            const result = (profit / lotSize) * 100;
-            form.querySelector('.result').innerText = `Profit Percentage: ${result.toFixed(2)}%`;
-          } else {
-            form.querySelector('.result').innerText = 'Please fill all fields.';
-          }
-        }
-      });
-    });
+    // Opcional: Centralize o primeiro ao carregar página
+    // window.onload = () => { centerCalculator(0); }
   </script>
 </body>
 </html>
