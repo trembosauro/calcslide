@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Unified Calculators</title>
+  <title>Calculators</title>
   <style>
     :root {
       --primary-bg: #1F1F1F;
@@ -25,11 +25,17 @@
       align-items: center;
     }
 
-    .carousel {
-      position: relative;
+    .carousel-wrapper {
       width: 100%;
       max-width: 600px;
+      margin: 20px 0;
+    }
+
+    /* Carousel container */
+    .carousel {
+      position: relative;
       overflow: hidden;
+      width: 100%;
     }
 
     .carousel-inner {
@@ -39,9 +45,9 @@
 
     .carousel-item {
       min-width: 100%;
+      transition: opacity 0.5s ease;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.5s ease-in-out;
     }
 
     .carousel-item.active {
@@ -49,14 +55,17 @@
       pointer-events: auto;
     }
 
+    /* Calculator styling */
     .calculator {
       background-color: var(--card-bg);
       padding: 20px;
       border-radius: 16px;
       box-shadow: 0 0 10px rgba(0,0,0,0.35);
+      max-width: 600px;
+      width: 100%;
     }
 
-    label, input, button {
+    label, input, button, select {
       font-size: 16px;
       color: var(--white);
     }
@@ -85,94 +94,120 @@
       font-weight: bold;
     }
 
+    /* Carousel navigation buttons */
+    .carousel-controls {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
     .carousel-control {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 24px;
-      background: rgba(255, 255, 255, 0.7);
+      font-size: 18px;
+      padding: 8px 16px;
+      border-radius: 4px;
+      background: var(--white3);
+      color: var(--primary-bg);
       border: none;
       cursor: pointer;
-      padding: 10px;
+      transition: background 0.3s ease;
     }
 
-    .carousel-control.prev {
-      left: 10px;
+    .carousel-control:hover {
+      background: var(--white2);
     }
 
-    .carousel-control.next {
-      right: 10px;
+    .carousel-control:focus {
+      outline: none;
+    }
+
+    @media (max-width: 600px) {
+      .calculator {
+        padding: 15px;
+      }
+      .carousel-control {
+        font-size: 14px;
+        padding: 6px 12px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="carousel">
-    <div class="carousel-inner">
-      <div class="carousel-item active">
-        <form id="calculator" class="calculator">
-          <h2>Normal Calculator</h2>
-          <label for="operationInput">Math Expression:</label>
-          <input type="text" id="operationInput" placeholder="Type an operation" />
-          <button type="submit">Calculate</button>
-          <div class="result" id="normalResultText"></div>
-        </form>
-      </div>
-      <div class="carousel-item">
-        <form id="ruleOfThreeCalculator" class="calculator">
-          <h2>Rule of Three</h2>
-          <label>A:</label>
-          <input type="number" id="inputA" />
-          <label>B:</label>
-          <input type="number" id="inputB" />
-          <label>C:</label>
-          <input type="number" id="inputC" />
-          <label>X:</label>
-          <input type="text" id="inputX" disabled />
-          <button type="submit">Calculate</button>
-          <div class="result" id="ruleOfThreeResultText"></div>
-        </form>
-      </div>
-      <div class="carousel-item">
-        <form id="leverageCalculator" class="calculator">
-          <h2>Leverage Calculator</h2>
-          <label>Leverage:</label>
-          <input type="number" id="leverage" />
-          <label>Percentage Earned (%):</label>
-          <input type="number" id="percentage" />
-          <button type="submit">Calculate</button>
-          <div class="result" id="leveragedProfitResultText"></div>
-        </form>
-      </div>
-      <div class="carousel-item">
-        <form id="profitCalculator" class="calculator">
-          <h2>Profit Percentage</h2>
-          <label>Lot Size ($):</label>
-          <input type="number" id="lotSize" />
-          <label>Profit Amount ($):</label>
-          <input type="number" id="profit" />
-          <button type="submit">Calculate</button>
-          <div class="result" id="profitResultText"></div>
-        </form>
-      </div>
-      <div class="carousel-item">
-        <form id="compoundInterestCalculator" class="calculator">
-          <h2>Compound Interest</h2>
-          <label>Initial Investment:</label>
-          <input type="number" id="initialInvestment" />
-          <label>Monthly Contribution:</label>
-          <input type="number" id="contribution" />
-          <label>Rate (%):</label>
-          <input type="number" id="rate" />
-          <label>Period (Months):</label>
-          <input type="number" id="period" />
-          <button type="submit">Calculate</button>
-          <div class="result" id="compoundInterestResultText"></div>
-        </form>
-      </div>
+  <!-- Calculators -->
+  <div id="calculators">
+    <div class="carousel-item active">
+      <form id="calculator" class="calculator">
+        <h2>Normal Calculator</h2>
+        <label for="operationInput">Math Expression:</label>
+        <input type="text" id="operationInput" placeholder="Type an operation" />
+        <button type="submit">Calculate</button>
+        <div class="result" id="normalResultText"></div>
+      </form>
     </div>
-    <button class="carousel-control prev">&lt;</button>
-    <button class="carousel-control next">&gt;</button>
+
+    <div class="carousel-item">
+      <form id="ruleOfThreeCalculator" class="calculator">
+        <h2>Rule of Three</h2>
+        <label>A:</label>
+        <input type="number" id="inputA" />
+        <label>B:</label>
+        <input type="number" id="inputB" />
+        <label>C:</label>
+        <input type="number" id="inputC" />
+        <label>X:</label>
+        <input type="text" id="inputX" disabled />
+        <button type="submit">Calculate</button>
+        <div class="result" id="ruleOfThreeResultText"></div>
+      </form>
+    </div>
+
+    <div class="carousel-item">
+      <form id="leverageCalculator" class="calculator">
+        <h2>Leverage Calculator</h2>
+        <label>Leverage:</label>
+        <input type="number" id="leverage" />
+        <label>Percentage Earned (%):</label>
+        <input type="number" id="percentage" />
+        <button type="submit">Calculate</button>
+        <div class="result" id="leveragedProfitResultText"></div>
+      </form>
+    </div>
+
+    <div class="carousel-item">
+      <form id="profitCalculator" class="calculator">
+        <h2>Profit Percentage Calculator</h2>
+        <label>Lot Size ($):</label>
+        <input type="number" id="lotSize" />
+        <label>Profit Amount ($):</label>
+        <input type="number" id="profit" />
+        <button type="submit">Calculate</button>
+        <div class="result" id="profitResultText"></div>
+      </form>
+    </div>
+
+    <div class="carousel-item">
+      <form id="compoundInterestCalculator" class="calculator">
+        <h2>Compound Interest Calculator</h2>
+        <label>Initial Investment:</label>
+        <input type="number" id="initialInvestment" />
+        <label>Monthly Contribution:</label>
+        <input type="number" id="contribution" />
+        <label>Rate (%):</label>
+        <input type="number" id="rate" />
+        <label>Period (Months):</label>
+        <input type="number" id="period" />
+        <button type="submit">Calculate</button>
+        <div class="result" id="compoundInterestResultText"></div>
+      </form>
+    </div>
   </div>
+
+  <!-- Carousel Controls -->
+  <div class="carousel-controls">
+    <button class="carousel-control prev">Previous</button>
+    <button class="carousel-control next">Next</button>
+  </div>
+
   <script>
     const items = document.querySelectorAll('.carousel-item');
     const prevButton = document.querySelector('.carousel-control.prev');
@@ -182,9 +217,10 @@
     function showItem(index) {
       items.forEach((item, i) => {
         item.classList.remove('active');
-        if (i === index) item.classList.add('active');
+        if (i === index) {
+          item.classList.add('active');
+        }
       });
-      document.querySelector('.carousel-inner').style.transform = `translateX(-${index * 100}%)`;
     }
 
     prevButton.addEventListener('click', () => {
@@ -197,7 +233,7 @@
       showItem(currentIndex);
     });
 
-    // Placeholders for form submissions
+    // Placeholder for form submissions
     document.querySelectorAll('form').forEach(form => {
       form.addEventListener('submit', (e) => {
         e.preventDefault();
