@@ -46,6 +46,8 @@ body {
   display: flex;
   align-items: flex-start;
   justify-content: center;
+  min-height: 100vh;
+
 }
 
 .calculators-list {
@@ -53,11 +55,30 @@ body {
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
   width: 100%;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 16px auto;
   padding-left: 16px;
   padding-right: 16px;
-  box-sizing: border-box; /* Adicione esta linha */
+  box-sizing: border-box;
+}
+
+@media (min-width: 1600px) {
+  .calculators-list {
+    grid-template-columns: repeat(4, 1fr);
+    max-width: 1800px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .calculators-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 800px) {
+  .calculators-list {
+    grid-template-columns: 1fr;
+  }
 }
 .calculator {
   background-color: var(--card-bg);
