@@ -36,28 +36,29 @@ body {
 }
 
 .scroll-container {
-  width: 90vw;
-  max-width: 90vw;
-  overflow-x: auto;
+  width: 100vw;
+  max-width: 100vw;
+  overflow-x: hidden;
   overflow-y: hidden;
   padding-bottom: 24px;
   scroll-behavior: smooth;
   display: flex;
   align-items: flex-start;
+  justify-content: center;
 }
 
 .calculators-list {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   gap: 16px;
-  width: fit-content;
+  width: 100%;
 }
-
 .calculator {
-  background-color: var(--card-bg);
-  padding: 20px;
-  border-radius: 16px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.35);
+  background-color: transparent;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
   min-width: 250px;
   max-width: 280px;
   width: 320px;
