@@ -35,45 +35,6 @@ body {
   align-items: center;
 }
 
-.carousel-controls {
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-  margin-top: 16px;
-  margin-bottom: 16px;
-  width: 100%;
-  max-width: 600px;
-}
-
-.calculator h2 {
-  font-size: 16px;
-}
-
-.carousel-control {
-  padding: 12px 24px;
-  border-radius: 16px;
-  background-color: transparent;
-  color: var(--white);
-  border: 2px solid var(--white2);
-  cursor: pointer;
-  transition: background-color 0.3s, border-color 0.3s, color 0.3s;
-  font-size: 16px;
-  width: auto;
-}
-
-.carousel-control:hover {
-  background-color: var(--white2);
-  color: var(--primary-bg);
-  border-color: var(--white3);
-}
-
-.carousel-control:focus {
-  outline: none;
-  background-color: var(--white3);
-  color: var(--primary-bg);
-  border-color: var(--white3);
-}
-
 .scroll-container {
   width: 90vw;
   max-width: 90vw;
