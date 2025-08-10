@@ -1,107 +1,293 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Calculators</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div class="scroll-container" id="scrollContainer">
-    <div class="calculators-list" id="calculatorsList">
-      <form id="calculator" class="calculator">
-        <h2>Basic Calculator</h2>
-        <label for="operationInput">Math Expression:</label>
-        <input type="text" id="operationInput" placeholder="Type an operation" />
-        <button type="submit">Calculate</button>
-        <div class="result" id="normalResultText"></div>
-      </form>
-
-      <form class="calculator" id="ruleOfThreeCalculator" autocomplete="off">
-        <h2>Proportion Calculator</h2>
-        <div class="rule-three-block">
-          <div class="rule-three-row">
-            <input type="number" id="inputA" step="any" placeholder="A" />
-            <span class="rule-three-label">IS TO</span>
-            <input type="number" id="inputB" step="any" placeholder="B" />
-          </div>
-          <div class="rule-three-equal">AS</div>
-          <div class="rule-three-row">
-            <input type="number" id="inputC" step="any" placeholder="C" />
-            <span class="rule-three-label">IS TO</span>
-            <input type="text" id="inputX" placeholder="X" readonly class="output-field" />
-          </div>
-        </div>
-        <button type="submit" class="mt-30">Calculate</button>
-        <div class="result" id="ruleOfThreeResultText"></div>
-      </form>
-
-      <form id="leverageCalculator" class="calculator">
-        <h2>Leverage Profit Calculator</h2>
-        <label>Leverage:</label>
-        <input type="number" id="leverage" step="any" />
-        <label>Percentage Earned (%):</label>
-        <input type="number" id="percentage" step="any" />
-        <button type="submit">Calculate</button>
-        <div class="result" id="leveragedProfitResultText"></div>
-      </form>
-
-      <form id="profitCalculator" class="calculator">
-        <h2>Profit Percentage Calculator</h2>
-        <label>Lot Size ($):</label>
-        <input type="number" id="lotSize" step="any" />
-        <label>Profit Amount ($):</label>
-        <input type="number" id="profit" step="any" />
-        <button type="submit">Calculate</button>
-        <div class="result" id="profitResultText"></div>
-      </form>
-
-      <form id="compoundInterestCalculator" class="calculator">
-        <h2>Compound Interest Calculator</h2>
-        <label>Initial Investment:</label>
-        <input type="number" id="initialInvestment" step="any" />
-        <label>Monthly Contribution:</label>
-        <input type="number" id="contribution" step="any" />
-        <label>Rate (%):</label>
-        <input type="number" id="rate" step="any" />
-        <label>Period (Months):</label>
-        <input type="number" id="period" step="any" />
-        <button type="submit">Calculate</button>
-        <div class="result" id="compoundInterestResultText"></div>
-      </form>
-
-      <form class="calculator" id="b3ProfitCalculator" autocomplete="off">
-        <h2>B3 Futures Profit Calculator</h2>
-        <div class="form-group">
-          <label for="contracts">Contracts:</label>
-          <input type="number" id="contracts" name="contracts" step="1" />
-        </div>
-        <div class="form-group">
-          <label for="type">Type:</label>
-          <select id="type" name="type">
-            <option value="miniIndice">Mini Index</option>
-            <option value="miniDolar">Mini Dollar</option>
-            <option value="indice">Index</option>
-            <option value="dolar">Dollar</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="points">Points:</label>
-          <input type="number" id="points" step="0.5" name="points" />
-        </div>
-        <div class="checkbox-container">
-          <span>Tax Deducted</span>
-          <input type="checkbox" id="taxDeducted" name="taxDeducted" />
-        </div>
-        <button type="submit">Calculate</button>
-        <div class="result" id="b3ProfitResultText"></div>
-      </form>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Calculators</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  </head>
+  <body>
+    <div class="toggle-buttons">
+      <button class="toggle-button active" data-id="calculator">
+        Basic Calculator
+      </button>
+      <button class="toggle-button" data-id="ruleOfThreeCalculator">
+        Proportion Calculator
+      </button>
+      <button class="toggle-button" data-id="leverageCalculator">
+        Leverage Profit
+      </button>
+      <button class="toggle-button" data-id="profitCalculator">
+        Profit Percentage
+      </button>
+      <button class="toggle-button" data-id="compoundInterestCalculator">
+        Compound Interest
+      </button>
+      <button class="toggle-button" data-id="b3ProfitCalculator">
+        B3 Futures Profit
+      </button>
     </div>
-  </div>
-  <script src="https://unpkg.com/mathjs@11.8.0/lib/browser/math.js"></script>
-  <script src="script.js"></script>
-</body>
+
+    <main>
+      <section class="calculators">
+        <form class="calculator show" id="calculator" autocomplete="off">
+          <h2>Basic Calculator</h2>
+          <p class="description">
+            Perform basic arithmetic operations on any math expression.
+          </p>
+          <div class="form-group">
+            <label for="operationInput">Math Expression:</label>
+            <input
+              type="text"
+              id="operationInput"
+              name="operationInput"
+              placeholder="Enter math expression"
+              aria-label="Math expression"
+              required
+            />
+          </div>
+          <button type="submit">Calculate</button>
+          <div class="result" id="normalResultText"></div>
+        </form>
+
+        <form class="calculator" id="ruleOfThreeCalculator" autocomplete="off">
+          <h2>Proportion Calculator</h2>
+          <p class="description">
+            Find the unknown value in a proportion using the rule of three.
+          </p>
+          <div class="rule-three-block">
+            <div class="rule-three-row">
+              <label for="inputA" class="screen-reader-only">A</label>
+              <input
+                type="number"
+                id="inputA"
+                name="inputA"
+                step="any"
+                inputmode="decimal"
+                placeholder="A"
+                required
+              />
+              <span class="rule-three-label">IS TO</span>
+              <label for="inputB" class="screen-reader-only">B</label>
+              <input
+                type="number"
+                id="inputB"
+                name="inputB"
+                step="any"
+                inputmode="decimal"
+                placeholder="B"
+                required
+              />
+            </div>
+            <div class="rule-three-equal">AS</div>
+            <div class="rule-three-row">
+              <label for="inputC" class="screen-reader-only">C</label>
+              <input
+                type="number"
+                id="inputC"
+                name="inputC"
+                step="any"
+                inputmode="decimal"
+                placeholder="C"
+                required
+              />
+              <span class="rule-three-label">IS TO</span>
+              <label for="inputX" class="screen-reader-only">X</label>
+              <input
+                type="text"
+                id="inputX"
+                placeholder="X"
+                aria-label="Result X"
+                disabled
+              />
+            </div>
+          </div>
+          <button type="submit" class="rule-three-submit">Calculate</button>
+          <div class="result" id="ruleOfThreeResultText"></div>
+        </form>
+
+        <form class="calculator" id="leverageCalculator" autocomplete="off">
+          <h2>Leverage Profit Calculator</h2>
+          <p class="description">
+            Estimate trading profits from leverage and percentage gain.
+          </p>
+          <div class="form-group">
+            <label for="leverage">Leverage:</label>
+            <input
+              type="number"
+              id="leverage"
+              step="any"
+              inputmode="decimal"
+              name="leverage"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="percentage">Percentage Earned (%):</label>
+            <input
+              type="number"
+              id="percentage"
+              step="any"
+              inputmode="decimal"
+              name="percentage"
+              required
+            />
+          </div>
+          <button type="submit">Calculate</button>
+          <div class="result" id="leveragedProfitResultText"></div>
+        </form>
+
+        <form class="calculator" id="profitCalculator" autocomplete="off">
+          <h2>Profit Percentage Calculator</h2>
+          <p class="description">
+            Calculate the profit percentage of a trade from its lot size and
+            profit.
+          </p>
+          <div class="form-group">
+            <label for="lotSize">Lot Size ($):</label>
+            <input
+              type="number"
+              id="lotSize"
+              step="any"
+              inputmode="decimal"
+              name="lotSize"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="profit">Profit Amount ($):</label>
+            <input
+              type="number"
+              id="profit"
+              step="any"
+              inputmode="decimal"
+              name="profit"
+              required
+            />
+          </div>
+          <button type="submit">Calculate</button>
+          <div class="result" id="profitResultText"></div>
+        </form>
+
+        <form
+          class="calculator"
+          id="compoundInterestCalculator"
+          autocomplete="off"
+        >
+          <h2>Compound Interest Calculator</h2>
+          <p class="description">
+            Determine the future value of an investment with compound interest.
+          </p>
+          <div class="form-group">
+            <label for="initialInvestment">Initial Investment ($):</label>
+            <input
+              type="number"
+              id="initialInvestment"
+              step="any"
+              inputmode="decimal"
+              name="initialInvestment"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="contribution">Contribution per Period ($):</label>
+            <input
+              type="number"
+              id="contribution"
+              step="any"
+              inputmode="decimal"
+              name="contribution"
+            />
+          </div>
+          <div class="form-group">
+            <label for="rate">Annual Interest Rate (%):</label>
+            <input
+              type="number"
+              id="rate"
+              step="any"
+              inputmode="decimal"
+              name="rate"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="period">Investment Period (years):</label>
+            <input
+              type="number"
+              id="period"
+              step="any"
+              inputmode="decimal"
+              name="period"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="compoundFrequency">Compounding Frequency:</label>
+            <select id="compoundFrequency" name="compoundFrequency">
+              <option value="daily">Daily</option>
+              <option value="weekly">Weekly</option>
+              <option value="monthly">Monthly</option>
+              <option value="yearly">Yearly</option>
+            </select>
+          </div>
+          <button type="submit">Calculate</button>
+          <div class="result" id="compoundInterestResultText"></div>
+        </form>
+
+        <form class="calculator" id="b3ProfitCalculator" autocomplete="off">
+          <h2>B3 Futures Profit Calculator</h2>
+          <p class="description">
+            Estimate profit from B3 futures contracts and optionally deduct
+            taxes.
+          </p>
+          <div class="form-group">
+            <label for="contracts">Contracts:</label>
+            <input
+              type="number"
+              id="contracts"
+              name="contracts"
+              inputmode="decimal"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="type">Type:</label>
+            <select id="type" name="type">
+              <option value="miniIndice">Mini Index</option>
+              <option value="miniDolar">Mini Dollar</option>
+              <option value="indice">Index</option>
+              <option value="dolar">Dollar</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="points">Points:</label>
+            <input
+              type="number"
+              id="points"
+              step="0.5"
+              inputmode="decimal"
+              name="points"
+              required
+            />
+          </div>
+          <label class="checkbox-container">
+            <span>Tax Deducted</span>
+            <input type="checkbox" id="taxDeducted" name="taxDeducted" />
+          </label>
+          <button type="submit">Calculate</button>
+          <div class="result" id="b3ProfitResultText"></div>
+        </form>
+      </section>
+    </main>
+
+    <script src="https://unpkg.com/mathjs@11.8.0/lib/browser/math.js"></script>
+    <script src="script.js"></script>
+  </body>
 </html>
