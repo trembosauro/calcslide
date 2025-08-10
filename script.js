@@ -28,7 +28,7 @@ document.getElementById('ruleOfThreeCalculator').addEventListener('submit', func
     inputX.value = X.toFixed(4);
     resultDiv.textContent = `X = ${X.toFixed(4)}`;
   } else {
-    resultDiv.textContent = 'Please fill all fields.';
+    resultDiv.textContent = A === 0 ? 'A cannot be zero.' : 'Please fill all fields.';
     inputX.value = '';
   }
 });

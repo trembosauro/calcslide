@@ -12,6 +12,7 @@ input[type=number] {
   --primary-bg: #1F1F1F;
   --card-bg: #2B2B2B;
   --input-bg: #3D3D3D;
+  --accent-color: #6200EE;
   --white: rgba(255,255,255,0.9);
   --white2: rgba(255,255,255,0.42);
   --white3: rgba(255,255,255,0.56);
@@ -22,10 +23,7 @@ input[type=number] {
 }
 
 body {
-  user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  font-family: Arial, sans-serif;
+  font-family: 'Roboto', Arial, sans-serif;
   background-color: var(--primary-bg);
   color: var(--white);
   margin: 0;
@@ -118,25 +116,42 @@ button[type="submit"] {
   padding: 12px;
   width: 100%;
   border-radius: 16px;
-  background-color: transparent;
+  background-color: var(--accent-color);
   color: var(--white);
-  border: 2px solid var(--white2);
+  border: none;
   cursor: pointer;
-  transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+  position: relative;
+  overflow: hidden;
+  transition: background-color 0.3s, box-shadow 0.3s;
   margin-top: 20px;
 }
 
 button[type="submit"]:hover {
-  background-color: var(--white2);
-  color: var(--primary-bg);
-  border-color: var(--white3);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
 button[type="submit"]:focus {
   outline: none;
-  background-color: var(--white3);
-  color: var(--primary-bg);
-  border-color: var(--white3);
+  box-shadow: 0 0 0 3px rgba(98,0,238,0.3);
+}
+
+button[type="submit"]::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255,255,255,0.3);
+  border-radius: 50%;
+  transform: scale(0);
+  opacity: 0;
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+button[type="submit"]:active::after {
+  transform: scale(2);
+  opacity: 1;
 }
 
 .result {
@@ -173,12 +188,13 @@ button[type="submit"]:focus {
   font-weight: bold;
 }
 
-.rule-three-row input[disabled] {
+.output-field {
   font-weight: bold;
   font-size: 1.2em;
   background: var(--primary-bg);
   color: var(--white);
   text-align: center;
+  border: none;
 }
 
 .form-group {
@@ -195,4 +211,8 @@ label {
   align-items: center;
   gap: 8px;
   margin-top: 10px;
+}
+
+.mt-30 {
+  margin-top: 30px;
 }
