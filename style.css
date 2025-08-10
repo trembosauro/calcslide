@@ -16,6 +16,7 @@ input[type=number] {
   --white: rgba(255,255,255,0.9);
   --white2: rgba(255,255,255,0.42);
   --white3: rgba(255,255,255,0.56);
+  --radius: 16px;
 }
 
 * {
@@ -81,7 +82,7 @@ body {
 .calculator {
   background-color: var(--card-bg);
   padding: 24px 20px;
-  border-radius: 18px;
+  border-radius: var(--radius);
   box-shadow: 0 2px 16px 0 rgba(0,0,0,0.18);
   width: 100%;
   min-width: 0;
@@ -106,16 +107,33 @@ select {
   padding: 10px;
   margin-top: 8px;
   margin-bottom: 16px;
-  border-radius: 8px;
+  border-radius: var(--radius);
   border: 2px solid var(--input-bg);
   background-color: var(--input-bg);
   box-sizing: border-box;
+  transition: border-color 0.3s;
+}
+
+input:focus,
+select:focus {
+  border-color: var(--white2);
+  outline: none;
+  border-radius: var(--radius);
+}
+
+input:disabled,
+select:disabled,
+textarea:disabled {
+  border: 2px solid transparent;
+  background-color: #444;
+  color: #999;
+  border-radius: var(--radius);
 }
 
 button[type="submit"] {
   padding: 12px;
   width: 100%;
-  border-radius: 16px;
+  border-radius: var(--radius);
   background-color: var(--accent-color);
   color: var(--white);
   border: none;
@@ -135,29 +153,35 @@ button[type="submit"]:focus {
   box-shadow: 0 0 0 3px rgba(98,0,238,0.3);
 }
 
-button[type="submit"]::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255,255,255,0.3);
-  border-radius: 50%;
-  transform: scale(0);
-  opacity: 0;
-  transition: transform 0.3s, opacity 0.3s;
+
+button[type="submit"]:active {
+  box-shadow: 0 0 4px rgba(0,0,0,0.4);
 }
 
-button[type="submit"]:active::after {
-  transform: scale(2);
-  opacity: 1;
+.ripple-effect {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  animation: ripple 600ms linear;
+  background-color: rgba(255,255,255,0.4);
+  pointer-events: none;
+  opacity: 0.75;
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
 }
 
 .result {
   margin-top: 20px;
   font-weight: bold;
   color: var(--white);
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 16px;
 }
 
 .rule-three-block {
@@ -171,6 +195,24 @@ button[type="submit"]:active::after {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.rule-three-row input {
+  width: 80px;
+  text-align: center;
+  font-size: 1.1em;
+  padding: 12px;
+  border-radius: var(--radius);
+  border: 2px solid var(--input-bg);
+  background: #222;
+  color: var(--white);
+  transition: border 0.17s;
+}
+
+.rule-three-row input:focus {
+  border: 2px solid var(--white3);
+  outline: none;
+  border-radius: var(--radius);
 }
 
 .rule-three-label {
@@ -211,6 +253,7 @@ label {
   align-items: center;
   gap: 8px;
   margin-top: 10px;
+  border-radius: var(--radius);
 }
 
 .mt-30 {
