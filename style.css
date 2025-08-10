@@ -7,6 +7,12 @@
   --white3: rgba(255, 255, 255, 0.56);
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 .screen-reader-only {
   position: absolute;
   width: 1px;
@@ -40,12 +46,11 @@ button {
   display: grid;
   width: 100%;
   gap: 16px;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 
 @media (min-width: 600px) {
   .calculators {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 24px;
   }
 }
@@ -181,6 +186,7 @@ h2 {
 }
 
 main {
+  width: 100%;
   opacity: 1;
   transform: none;
   transition: none;
