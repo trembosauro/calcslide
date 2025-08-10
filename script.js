@@ -183,6 +183,6 @@ if (typeof document !== 'undefined') {
 }
 
 if (typeof module !== 'undefined') {
-  module.exports = { compoundInterestCalc, b3ProfitCalc };
+  module.exports = { toNumber, compoundInterestCalc, b3ProfitCalc };
 }
 
