@@ -8,17 +8,6 @@ function showError(form, msg, resultEl) {
   if (el) el.innerText = 'Error: ' + msg;
 }
 
-function showCalculator(calculatorId) {
-  document
-    .querySelectorAll('.calculator')
-    .forEach(calc => calc.classList.remove('show'));
-  const target = document.getElementById(calculatorId);
-  if (target) target.classList.add('show');
-  document.querySelectorAll('.toggle-button').forEach(btn => {
-    btn.classList.toggle('active', btn.getAttribute('data-id') === calculatorId);
-  });
-}
-
 function toNumber(value) {
   if (value === undefined || value === null) return null;
   const num = parseFloat(String(value).replace(',', '.'));
@@ -158,10 +147,6 @@ if (typeof document !== 'undefined') {
     btn.addEventListener('click', createRipple);
   });
 
-  document.querySelectorAll('.toggle-button').forEach(btn => {
-    btn.addEventListener('click', () => showCalculator(btn.getAttribute('data-id')));
-  });
-
   document.querySelectorAll('.calculator input, .calculator select').forEach(input => {
     input.addEventListener('input', e => {
       clearResult(e.target.closest('form'));
@@ -194,7 +179,6 @@ if (typeof document !== 'undefined') {
       const mainEl = document.querySelector('main');
       if (mainEl) mainEl.classList.add('loaded');
     }, 60);
-    showCalculator('calculator');
   });
 }
 
