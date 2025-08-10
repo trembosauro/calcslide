@@ -3,6 +3,12 @@
   "version": "1.0.0",
   "description": "Collection of web-based calculators",
   "scripts": {
-    "test": "node --test"
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }
