@@ -1,0 +1,8 @@
+{
+  "name": "calcslide",
+  "version": "1.0.0",
+  "description": "Collection of web-based calculators",
+  "scripts": {
+    "test": "node --test"
+  }
+}
